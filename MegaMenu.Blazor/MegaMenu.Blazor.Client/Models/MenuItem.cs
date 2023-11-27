@@ -1,4 +1,4 @@
-﻿namespace Mo.web.Client.Models;
+﻿namespace MegaMenu.Blazor.Client.Models;
 
 public class MenuItem
 {
