@@ -11,10 +11,45 @@
 </div>
 <!-- Page header contains page title -->
 
-
+<!-- Mega Menu -->
+<div class="row justify-content-center mb-5">
+    <div class="col-10 col-sm-10 col-md-8 col-lg-5 col-xl-4 text-center">
+        <a class="btn" href="#">Home</a>
+        <a class="btn" href="#">About</a>
+        <a id="collapseButton" class="btn rounded-bottom-0 rounded-top-1 @(isMegaMenuVisible? "bg-mega-menu mega-menu-btn-shadow" : "")" @onclick="ToggleCollapse" @onmouseover="StartTimer" @onmouseleave='() => CheckMousePosition("collapse")'>
+            <span>Products</span>
+            <span><i class="bi bi-caret-down-fill"></i></span>
+        </a>
+    </div>
+    @if (isMegaMenuVisible)
+    {
+        // class="col-10 col-sm-10 col-md-6 col-lg-5 col-xl-4"
+        <div class="row justify-content-center">
+            <div class="col-10 col-sm-10 col-md-12 col-lg-10 col-xl-8 bg-mega-menu rounded-2 mega-menu-box-shadow">
+                <div @ref="collapseDiv" id="collapse" class="row justify-content-center p-3" @onmouseleave='() => CheckMousePosition("collapseButton")'>
+                    @for (int i = 0; i < megaMenuColumnCount; i++)
+                    {
+                        <div class="col">
+                            @foreach (var item in megaMenuItems)
+                            {
+                                if (item.ColumnIndex == i)
+                                {
+                                    <div class="@(item.IsHeader? "my-2 fs-6" : "mb-1 fs-6")">
+                                        <a class="link-dark @(item.IsHeader? "link-offset-3 link-underline link-underline-opacity-10 fw-bold" : "link-underline link-underline-opacity-0")" href="@item.Link"> @item.Text </a>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<!-- Mega Menu -->
 
 <!-- Sub-header -->
-<div class="row justify-content-center mb-3">
+<div class="row justify-content-center mb-3 @(isMegaMenuVisible? "blur" : "")">
     <div class="col-10 col-sm-10 col-md-8 col-lg-5 col-xl-4 text-center">
         <span class="title">New Updates</span>
     </div>
@@ -22,7 +57,7 @@
 <!-- Sub-header -->
 
 <!-- Main Content -->
-<div class="row justify-content-center">
+<div class="row justify-content-center @(isMegaMenuVisible? "blur" : "")">
     <div class="col-10 col-sm-10 col-md-6 col-lg-5 col-xl-4">
     </div>
     <div class="col-10 col-sm-10 col-md-6 col-lg-5 col-xl-4">
@@ -59,5 +94,259 @@
 </script>
 
 @code {
+    private int megaMenuColumnCount = 3;
+    private bool isMegaMenuVisible = false;
+    private bool waitingToVisible = false;
+    private Timer timer;
+    private ElementReference collapseDiv;
+    private List<MenuItem> megaMenuItems = new List<MenuItem>();
 
+    void StartTimer(MouseEventArgs e)
+    {
+        if (!waitingToVisible)
+        {
+            waitingToVisible = true;
+            if (!isMegaMenuVisible)
+            {
+                timer = new Timer(400);
+                timer.Elapsed += ShowContent;
+                timer.Start();
+            }
+        }
+    }
+
+    async void ShowContent(object sender, System.Timers.ElapsedEventArgs e)
+    {
+        if (waitingToVisible)
+        {
+            await InvokeAsync(() =>
+            {
+                isMegaMenuVisible = true;
+                StateHasChanged();
+            });
+            timer.Stop();
+            timer.Dispose();
+
+        }
+    }
+
+    async Task CheckMousePosition(string elementId)
+    {
+        waitingToVisible = false;
+        if (timer != null)
+        {
+            timer.Stop();
+            timer.Dispose();
+        }
+        if (isMegaMenuVisible)
+        {
+            bool isMouseOverElement = await JSRuntime.InvokeAsync<bool>("checkMousePosition", elementId);
+            if (!isMouseOverElement)
+            {
+                HideContent();
+            }
+        }
+    }
+
+    void HideContent()
+    {
+        waitingToVisible = false;
+        isMegaMenuVisible = false;
+    }
+
+    private async Task ToggleCollapse()
+    {
+        isMegaMenuVisible = !isMegaMenuVisible;
+
+        if (isMegaMenuVisible)
+        {
+            await JSRuntime.InvokeVoidAsync("addClickListener", collapseDiv);
+        }
+        else
+        {
+            await JSRuntime.InvokeVoidAsync("removeClickListener", collapseDiv);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync("setupClickListener", DotNetObjectReference.Create(this));
+        }
+    }
+
+    [JSInvokable]
+    public void HideCollapse()
+    {
+        isMegaMenuVisible = false;
+        StateHasChanged();
+    }
+
+
+    protected override void OnInitialized()
+    {
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 0,
+                IsHeader = true,
+                Link = "https://google.com",
+                Text = "Menu Title 1"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 0,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 1"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 0,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 2"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 0,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 3"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 0,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 4"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 0,
+                IsHeader = true,
+                Link = "https://google.com",
+                Text = "Menu Title 2"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 0,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 5"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 0,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 6"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 0,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 7"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 0,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 8"
+            });
+
+        //
+
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 1,
+                IsHeader = true,
+                Link = "https://google.com",
+                Text = "Menu Title 3"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 1,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 9"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 1,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 10"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 1,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 11"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 1,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 12"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 1,
+                IsHeader = true,
+                Link = "https://google.com",
+                Text = "Menu Title 4"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 1,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 13"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 1,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 14"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 1,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 15"
+            });
+
+
+        //
+
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 2,
+                IsHeader = true,
+                Link = "https://google.com",
+                Text = "Menu Title 5"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 2,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 16"
+            });
+        megaMenuItems.Add(new MenuItem
+            {
+                ColumnIndex = 2,
+                IsHeader = false,
+                Link = "https://google.com",
+                Text = "Menu Link 17"
+            });
+
+    }
 }
