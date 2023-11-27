@@ -4,9 +4,9 @@
 @inject IJSRuntime JSRuntime
 
 <!-- Page header contains page title -->
-<div class="row justify-content-center mt-5">
+<div class="row justify-content-center my-5">
     <div class="col-10 col-sm-10 col-md-8 col-lg-5 col-xl-4 text-center">
-        <span class="owner ">Page Title</span>
+        <span class="fw-bolder fs-2">Lorem Ipsum</span>
     </div>
 </div>
 <!-- Page header contains page title -->
@@ -29,9 +29,11 @@
                 <div @ref="collapseDiv" id="collapse" class="row justify-content-center p-3" @onmouseleave='() => CheckMousePosition("collapseButton")'>
                     @for (int i = 0; i < megaMenuColumnCount; i++)
                     {
+                        // create column for mega menu dynamically based on megaMenuColumnCount
                         <div class="col">
                             @foreach (var item in megaMenuItems)
                             {
+                                // put each mega menu item in correct column
                                 if (item.ColumnIndex == i)
                                 {
                                     <div class="@(item.IsHeader? "my-2 fs-6" : "mb-1 fs-6")">
@@ -48,42 +50,53 @@
 </div>
 <!-- Mega Menu -->
 
-<!-- Sub-header -->
+<!-- Sub-header, this will blur if mega menu opened -->
 <div class="row justify-content-center mb-3 @(isMegaMenuVisible? "blur" : "")">
     <div class="col-10 col-sm-10 col-md-8 col-lg-5 col-xl-4 text-center">
-        <span class="title">New Updates</span>
+        <span class="title fw-lighter fst-italic">"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."</span>
     </div>
 </div>
 <!-- Sub-header -->
 
-<!-- Main Content -->
+<!-- Main Content, this will blur if mega menu opened -->
 <div class="row justify-content-center @(isMegaMenuVisible? "blur" : "")">
     <div class="col-10 col-sm-10 col-md-6 col-lg-5 col-xl-4">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus a enim non massa eleifend elementum. Fusce eget purus et quam ultricies tempor. Aliquam erat volutpat. In quis blandit turpis. Sed sed justo convallis, ornare eros ac, posuere sem. Ut est turpis, luctus id iaculis eget, porta id tellus. Donec ipsum odio, molestie nec varius eu, tincidunt pharetra ex. Praesent lacinia facilisis luctus. Vivamus venenatis lacus id leo scelerisque fermentum. Sed venenatis sit amet erat vitae consequat. Aenean sodales turpis eu eleifend lacinia. Nunc vel tellus non massa tincidunt auctor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce laoreet tortor a erat ultricies, vel tempor turpis blandit. Morbi rutrum ligula ac felis tincidunt, at fringilla metus tincidunt. Mauris at dictum neque.
+
+        Mauris egestas congue ligula ac accumsan. Proin tempus rutrum aliquam. Nullam vel rutrum sem. Nullam nunc mauris, accumsan ac finibus id, finibus non diam. Integer a enim nec lectus vehicula ultrices. Nulla ipsum elit, luctus auctor nulla in, venenatis ornare magna. Maecenas sagittis tortor turpis, ut tempor dolor lacinia ut. Integer posuere interdum magna vel cursus. Quisque dictum, diam euismod fermentum ultricies, dui dolor placerat sem, id faucibus ex nisi eu velit. Curabitur nec sem dolor. Mauris volutpat orci eget est molestie facilisis. Nullam nisl diam, consequat at commodo non, malesuada quis leo. Nunc egestas, erat non elementum tincidunt, diam sem aliquet urna, nec aliquam ligula tortor quis nunc. Nullam quis rhoncus urna.
     </div>
     <div class="col-10 col-sm-10 col-md-6 col-lg-5 col-xl-4">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus a enim non massa eleifend elementum. Fusce eget purus et quam ultricies tempor. Aliquam erat volutpat. In quis blandit turpis. Sed sed justo convallis, ornare eros ac, posuere sem. Ut est turpis, luctus id iaculis eget, porta id tellus. Donec ipsum odio, molestie nec varius eu, tincidunt pharetra ex. Praesent lacinia facilisis luctus. Vivamus venenatis lacus id leo scelerisque fermentum. Sed venenatis sit amet erat vitae consequat. Aenean sodales turpis eu eleifend lacinia. Nunc vel tellus non massa tincidunt auctor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce laoreet tortor a erat ultricies, vel tempor turpis blandit. Morbi rutrum ligula ac felis tincidunt, at fringilla metus tincidunt. Mauris at dictum neque.
+
+        Mauris egestas congue ligula ac accumsan. Proin tempus rutrum aliquam. Nullam vel rutrum sem. Nullam nunc mauris, accumsan ac finibus id, finibus non diam. Integer a enim nec lectus vehicula ultrices. Nulla ipsum elit, luctus auctor nulla in, venenatis ornare magna. Maecenas sagittis tortor turpis, ut tempor dolor lacinia ut. Integer posuere interdum magna vel cursus. Quisque dictum, diam euismod fermentum ultricies, dui dolor placerat sem, id faucibus ex nisi eu velit. Curabitur nec sem dolor. Mauris volutpat orci eget est molestie facilisis. Nullam nisl diam, consequat at commodo non, malesuada quis leo. Nunc egestas, erat non elementum tincidunt, diam sem aliquet urna, nec aliquam ligula tortor quis nunc. Nullam quis rhoncus urna.
     </div>
 </div>
 
 <script type="text/javascript">
+
+    // check mouse eneter an element
     window.checkMousePosition = function (elementId) {
         var element = document.getElementById(elementId);
         var rect = element.getBoundingClientRect();
         return (window.event.clientY >= rect.top && window.event.clientY <= rect.bottom && window.event.clientX >= rect.left && window.event.clientX <= rect.right);
     }
 
-
+    // setup click listener
     window.setupClickListener = function (dotnetHelper) {
         window.dotnetHelper = dotnetHelper;
     }
 
+    // add click listener to document
     window.addClickListener = function (element) {
         document.addEventListener('click', window.clickListener);
     }
 
+    // remove click listener from document
     window.removeClickListener = function (element) {
         document.removeEventListener('click', window.clickListener);
     }
 
+    // window click listener
     window.clickListener = function (event) {
         if (!document.getElementById('collapse').contains(event.target)) {
             window.dotnetHelper.invokeMethodAsync('HideCollapse');
@@ -94,15 +107,30 @@
 </script>
 
 @code {
+    // numbers of column in mega menu
     private int megaMenuColumnCount = 3;
+
+    // handle mega menu collapse div visibility
     private bool isMegaMenuVisible = false;
+
+    // handle mega menu button hover
+    // wait a little to prevent unnecessary action with any rapid movement of mouse 
     private bool waitingToVisible = false;
+
+    // handle mega menu visibility
+    // wait a little to prevent unnecessary action with any rapid movement of mouse
     private Timer timer;
+
+    // handle click event on mega menu button
     private ElementReference collapseDiv;
+
+    // list of mega menu items
     private List<MenuItem> megaMenuItems = new List<MenuItem>();
 
     void StartTimer(MouseEventArgs e)
     {
+        // start a timer and wait a while, then fire show content events
+        // it's prevent unnecessary action with any rapid movement of mouse
         if (!waitingToVisible)
         {
             waitingToVisible = true;
@@ -117,6 +145,7 @@
 
     async void ShowContent(object sender, System.Timers.ElapsedEventArgs e)
     {
+        // make mega menu visible if mouse hovering mega menu button for a while
         if (waitingToVisible)
         {
             await InvokeAsync(() =>
@@ -132,6 +161,11 @@
 
     async Task CheckMousePosition(string elementId)
     {
+        // this function fires on mouse leave from mega menu button and mega menu box
+        // if mouse leave mega menu button and enter mega menu box, no action required
+        // if mouse leave mega menu box and enter mega menu button, no action required
+        // else, mega menu box should hide
+
         waitingToVisible = false;
         if (timer != null)
         {
@@ -140,6 +174,7 @@
         }
         if (isMegaMenuVisible)
         {
+            // check where enter mouse
             bool isMouseOverElement = await JSRuntime.InvokeAsync<bool>("checkMousePosition", elementId);
             if (!isMouseOverElement)
             {
@@ -150,6 +185,7 @@
 
     void HideContent()
     {
+        // make mega menu box invisible by leaving mouse
         waitingToVisible = false;
         isMegaMenuVisible = false;
     }
@@ -158,6 +194,7 @@
     {
         isMegaMenuVisible = !isMegaMenuVisible;
 
+        // add appropriate click event based on collapse div is open or hide
         if (isMegaMenuVisible)
         {
             await JSRuntime.InvokeVoidAsync("addClickListener", collapseDiv);
@@ -170,6 +207,7 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
+        // initialize click event listener in first render
         if (firstRender)
         {
             await JSRuntime.InvokeVoidAsync("setupClickListener", DotNetObjectReference.Create(this));
@@ -179,6 +217,7 @@
     [JSInvokable]
     public void HideCollapse()
     {
+        // make mega menu box invisible by clicking outside the box
         isMegaMenuVisible = false;
         StateHasChanged();
     }
@@ -186,6 +225,7 @@
 
     protected override void OnInitialized()
     {
+        // seed mega menu items in first lunch
         megaMenuItems = SeedData.SeedMenuItems();
     }
 }

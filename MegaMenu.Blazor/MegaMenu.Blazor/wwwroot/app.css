@@ -21,21 +21,24 @@ body {
     margin-bottom: 60px;
 }
 
+/* Mega menu background color */
 .bg-mega-menu {
     background-color: #efebf2;
 }
 
+/* Make contents outside of mega menu blur */
 .blur {
     filter: blur(5px)
 }
 
+/* Mega menu button shadow */
 .mega-menu-btn-shadow {
     -webkit-box-shadow: 0px -7px 20px 4px rgba(0,0,0,0.17);
     -moz-box-shadow: 0px -7px 20px 4px rgba(0,0,0,0.17);
     box-shadow: 0px -7px 20px 4px rgba(0,0,0,0.17);
 }
 
-
+/* Mega menu div shadow */
 .mega-menu-box-shadow {
     -webkit-box-shadow: 0px 20px 20px 4px rgba(0,0,0,0.17);
     -moz-box-shadow: 0px 20px 20px 4px rgba(0,0,0,0.17);

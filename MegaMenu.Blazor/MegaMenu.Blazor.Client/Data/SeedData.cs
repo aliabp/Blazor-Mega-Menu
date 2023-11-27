@@ -6,6 +6,8 @@ public static class SeedData
 {
     public static List<MenuItem> SeedMenuItems()
     {
+        // seed initial data for mega menu items
+
         List<MenuItem> items = new List<MenuItem>();
         items.Add(new MenuItem
         {
