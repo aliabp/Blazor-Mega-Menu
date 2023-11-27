@@ -29,6 +29,34 @@
     </div>
 </div>
 
+<script type="text/javascript">
+    window.checkMousePosition = function (elementId) {
+        var element = document.getElementById(elementId);
+        var rect = element.getBoundingClientRect();
+        return (window.event.clientY >= rect.top && window.event.clientY <= rect.bottom && window.event.clientX >= rect.left && window.event.clientX <= rect.right);
+    }
+
+
+    window.setupClickListener = function (dotnetHelper) {
+        window.dotnetHelper = dotnetHelper;
+    }
+
+    window.addClickListener = function (element) {
+        document.addEventListener('click', window.clickListener);
+    }
+
+    window.removeClickListener = function (element) {
+        document.removeEventListener('click', window.clickListener);
+    }
+
+    window.clickListener = function (event) {
+        if (!document.getElementById('collapse').contains(event.target)) {
+            window.dotnetHelper.invokeMethodAsync('HideCollapse');
+            document.removeEventListener('click', window.clickListener);
+        }
+    }
+
+</script>
 
 @code {
 
